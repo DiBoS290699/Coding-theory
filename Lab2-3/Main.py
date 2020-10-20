@@ -55,37 +55,39 @@ class CyclicCodes:
                 syndromes[rem.to01()] = err
         return syndromes
 
+    # Возвращение кода со случайной ошибкой, либо без неё
     def make_a_mistake(self, code):
         if len(code) != self.n:
             print("ERROR! Invalid code length.")
             return code
-        make_a_mistake = np.random.randint(0, 2)
+        make_a_mistake = np.random.randint(0, 2)    # 1 - создать ошибку, 0 - не выполнять ошибку
         if make_a_mistake == 0:
             return code
         else:
-            error_bit = np.random.randint(0, self.n)
+            error_bit = np.random.randint(0, self.n)    # Индекс бита, в котором будет ошибка
             code[error_bit] = 0 if code[error_bit] == 1 else 0
             return code
 
+    # Кодировка файла, обнаружение ошибки, декодировка файла
     def search_error(self, path_to_file):
         file_bitarray = ba.bitarray()
-        syndromes = self.make_table()
-        errors = {}
+        syndromes = self.make_table()   # Возвращение таблицы синдромов класса
+        errors = {}     # Словарь ошибок: key - индекс начала кода с ошибкой, значение - синдромкода с ошибкой
         with open(path_to_file, 'rb') as file:
-            file_bitarray.fromfile(file)
+            file_bitarray.fromfile(file)        # Чтение файла
         for i in range(0, len(file_bitarray), self.n):
             code = file_bitarray[i: i+self.n]
             if len(code) != self.n:
                 continue
-            code = self.make_a_mistake(code)
+            code = self.make_a_mistake(code)    # Создание ошибки в коде длинной n
             file_bitarray[i: i+self.n] = code
-            syndrome = syndromes.get(file_bitarray[i: i+self.n].to01())
+            syndrome = syndromes.get(code.to01())     # Возвращение синдрома по ключу-коду
             if syndrome is not None:
-                errors[i] = syndrome
-            else:
+                errors[i] = syndrome    # Если синдром найден, то заносим значение синдрома и ключ-индекс
+            else:                       # иначе продолжаем
                 continue
         # ["path", "txt"]
-        path_to_file_arr = path_to_file.split(".")
+        path_to_file_arr = path_to_file.split(".")      # Разбиваем имя файла на название и формат файла
         with open(path_to_file_arr[0] + "_decode." + path_to_file_arr[1], 'wb') as f:
             file_bitarray.tofile(f)
         return errors
@@ -93,10 +95,10 @@ class CyclicCodes:
 
 cc = CyclicCodes()
 with open("Hello.txt", 'wb') as file:
-    file_bitarray = ba.bitarray('0'*cc.n*225)
+    file_bitarray = ba.bitarray('0'*cc.n*225)   # создание bitarray с определённым количеством нулей
     for i in range(0, len(file_bitarray)):
-        file_bitarray[i] = np.random.randint(0, 2) == 1
-    file_bitarray.tofile(file)
+        file_bitarray[i] = np.random.randint(0, 2) == 1     # Заполнение bitarray рандомными битами
+    file_bitarray.tofile(file)                  # Запись псевдослучайный bitarray в файл
 input1 = ba.bitarray('1010001')
 encode = cc.encode(input1)
 print(f'encode: {encode}')
