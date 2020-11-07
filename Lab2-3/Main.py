@@ -55,7 +55,7 @@ class CyclicCodes:
                 syndromes[rem.to01()] = err
         return syndromes
 
-    # Возвращение кода со случайной ошибкой, либо без неё
+    # Возвращение кода со случайной ошибкой
     def make_a_mistake(self, code):
         if len(code) != self.n:
             print("ERROR! Invalid code length.")
@@ -71,39 +71,9 @@ class CyclicCodes:
         code[error_bit] = not code[error_bit]
         return code
 
-    # Кодировка файла, обнаружение ошибки, декодировка файла
-    # Взять файл, 4 бита систематически кодировать в 7, записать файл, прочитать этот файл,
-    # каждые 7 битов поделит и получить остаток, по остатку (синдрому) найти вектор в таблице синдромов.
-    # Если синдром нулевой, то ошибки не было, иначе прибавляем к 7 битам полученный вектор ошибки,
-    # который хранит 1 в месте ошибки. Затем берём последние 4 бита из 7 битов и записывыаем в файл раскодированный код
-    # def search_error(self, path_to_file):
-    #     noiseproof_bitarray = ba.bitarray()
-    #     error_bitarray = None
-    #     syndromes = self.make_table()   # Возвращение таблицы синдромов класса
-    #     errors = {}     # Словарь ошибок: key - индекс начала кода с ошибкой, значение - синдромкода с ошибкой
-    #     with open(path_to_file, 'rb') as file:
-    #         noiseproof_bitarray.fromfile(file)        # Чтение файла
-    #     error_bitarray = ba.bitarray('0'*int((len(noiseproof_bitarray) * 7 / 4)))
-    #     for i in range(0, len(noiseproof_bitarray), self.k):
-    #         code = noiseproof_bitarray[i: i+self.k]
-    #         if len(code) != self.k:
-    #             continue
-    #         encode = self.encode_sys(code)
-    #         error_encode = self.make_a_mistake(encode)    # Создание ошибки в коде длинной n
-    #         noiseproof_bitarray[i: i+self.k] = encode
-    #         error_bitarray[i: i+self.n] = error_encode
-    #         syndrome = self.remainder(error_encode)
-    #         syndrome = syndromes.get(code.to01())     # Возвращение синдрома по ключу-коду
-    #         if syndrome is not None:
-    #             errors[i] = syndrome    # Если синдром найден, то заносим значение синдрома и ключ-индекс
-    #         else:                       # иначе продолжаем
-    #             continue
-    #     # ["path", "txt"]
-    #     path_to_file_arr = path_to_file.split(".")      # Разбиваем имя файла на название и формат файла
-    #     with open(path_to_file_arr[0] + "_decode." + path_to_file_arr[1], 'wb') as f:
-    #         noiseproof_bitarray.tofile(f)
-    #     return errors
-
+    # Кодировка файла path_to_input_file в новый файл path_to_output_file.
+    # Аргумент error == false - кодировка без помех
+    # Аргумент error == true - кодировка с помехой в одном бите в каждом коде
     def sys_encode_file(self, path_to_input_file, path_to_output_file, error=False):
         file_bitarray = ba.bitarray()
         with open(path_to_input_file, 'rb') as file:
@@ -121,6 +91,7 @@ class CyclicCodes:
             file_bitarray.tofile(f)
         print(f"Encoding ({path_to_input_file} in {path_to_output_file}) completed successfully")
 
+    # Декодирование файла path_to_input_file в файл path_to_output_file
     def sys_decode_file(self, path_to_input_file, path_to_output_file):
         file_bitarray = ba.bitarray()
         with open(path_to_input_file, 'rb') as file:
