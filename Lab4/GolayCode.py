@@ -105,7 +105,7 @@ input_k = ba.bitarray('011011111010')
 encode = gc.encode(input_k)
 print(f"Encode == {encode}")
 index_error = 1
-encode[index_error] = encode[index_error] is False
+encode[index_error] = not encode[index_error]
 print(f"Encode with an error in the {index_error} bit: {encode}")
 decode = gc.decode(encode)
 if decode is None:
