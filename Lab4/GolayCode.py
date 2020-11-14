@@ -7,20 +7,20 @@ class GolayCode:
     def __init__(self):
         self.k = 12
         self.n = 24
-        self.B = (
-            ba.bitarray('110111000101'),
-            ba.bitarray('101110001011'),
-            ba.bitarray('011100010111'),
-            ba.bitarray('111000101101'),
-            ba.bitarray('110001011011'),
-            ba.bitarray('100010110111'),
-            ba.bitarray('000101101111'),
-            ba.bitarray('001011011101'),
-            ba.bitarray('010110111001'),
-            ba.bitarray('101101110001'),
-            ba.bitarray('011011100011'),
-            ba.bitarray('111111111110')
-        )
+        self.B = np.array([
+            [True, True, False, True, True, True, False, False, False, True, False, True],
+            [True, False, True, True, True, False, False, False, True, False, True, True],
+            [False, True, True, True, False, False, False, True, False, True, True, True],
+            [True, True, True, False, False, False, True, False, True, True, False, True],
+            [True, True, False, False, False, True, False, True, True, False, True, True],
+            [True, False, False, False, True, False, True, True, False, True, True, True],
+            [False, False, False, True, False, True, True, False, True, True, True, True],
+            [False, False, True, False, True, True, False, True, True, True, False, True],
+            [False, True, False, True, True, False, True, True, True, False, False, True],
+            [True, False, True, True, False, True, True, True, False, False, False, True],
+            [False, True, True, False, True, True, True, False, False, False, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, False]
+        ])
 
     def wt(self, input_signal):
         wt = 0
@@ -39,76 +39,73 @@ class GolayCode:
         if len(input) != self.k:
             print("Error!")
             return None
-        G = np.zeros((self.k, self.n), dtype=bool)
-        for i in range(0, self.k):
-            G[i][i] = True
-            b_i = self.B[i].tolist()
-            for j in range(self.n - self.k):
-                G[i][self.k + j] = b_i[j]
-        # np_G = np.ndarray((G[i].tolist() for i in range(self.k)), dtype=bool)
-        np_input = np.array(input.tolist(), dtype=bool)
+        I = np.eye(self.k, dtype=bool)
+        G = np.concatenate([I, self.B], axis=1)
+        if input.__class__ == ba.bitarray().__class__:
+            np_input = np.array(input.tolist(), dtype=bool)
+        else:
+            np_input = np.array(input, dtype=bool)
         encode = np.dot(np_input, G)
         return self.list2bitarray(encode)
 
     def decode(self, input_n):
-        H = np.zeros((self.n, self.k), dtype=bool)
-        for i in range(0, self.k):
-            H[i][i] = True
-            H[self.k + i] = self.B[i].tolist()
-        np_input = np.array(input_n.tolist(), dtype=bool)
-        s = np.dot(np_input, H)
+        I = np.eye(self.k, dtype=bool)
+        H = np.concatenate([I, self.B])
+
+        if input_n.__class__ == ba.bitarray().__class__:
+            np_input = np.array(input_n.tolist(), dtype=bool)
+        else:
+            np_input = np.array(input_n, dtype=bool)
+        s = np.dot(np_input, H)                 # Step 1
         wt_s = self.wt(s)
 
-        if wt_s <= 3:
-            ba_u = ba.bitarray('0'*self.n)
+        if wt_s <= 3:                           # Step 2
+            u = np.zeros(self.n)
             for i in range(self.k):
-                ba_u[i] = s[i]
-            return input_n ^ ba_u
+                u[i] = s[i]
+            return np.logical_xor(np_input, u)
 
-        ba_s = self.list2bitarray(s)
-        for i in range(self.k):
-            tmp = ba_s ^ self.B[i]
+        # ba_s = self.list2bitarray(s)
+        for i in range(self.k):                 # Step 3
+            tmp = np.logical_xor(s, self.B[i])
             if self.wt(tmp) <= 2:
-                ba_u = ba.bitarray('0'*self.n)
-                ba_u[self.k + i] = True
+                u = np.zeros(self.n)
+                u[self.k + i] = True
                 for j in range(self.k):
-                    ba_u[j] = tmp[j]
-                return input_n ^ ba_u
+                    u[j] = tmp[j]
+                return np.logical_xor(np_input, u)
 
-        np_B = np.zeros((self.k, self.k), dtype=bool)
-        for i in range(self.k):
-            np_B[i] = self.B[i].tolist()
-        sB = np.dot(s, np_B)
-        ba_sB = self.list2bitarray(sB)
+        sB = np.dot(s, self.B)                  # Step 4
         wt_sB = self.wt(sB)
-        if wt_sB <= 3:
-            ba_u = ba.bitarray('0' * self.n)
+        if wt_sB <= 3:                          # Step 5
+            u = np.zeros(self.n)
             for i in range(self.n - self.k):
-                ba_u[self.n - self.k + i] = s[i]
-            return input_n ^ ba_u
+                u[self.n - self.k + i] = s[i]
+            return np.logical_xor(np_input, u)
 
-        for i in range(self.k):
-            tmp = ba_sB ^ self.B[i]
+        for i in range(self.k):                 # Step 6
+            tmp = np.logical_xor(sB, self.B[i])
             if self.wt(tmp) <= 2:
-                ba_u = ba.bitarray('0' * self.n)
-                ba_u[i] = True
+                u = np.zeros(self.n)
+                u[i] = True
                 for j in range(self.n - self.k):
-                    ba_u[self.k + j] = tmp[j]
-                return input_n ^ ba_u
-
+                    u[self.k + j] = tmp[j]
+                return np.logical_xor(np_input, u)
+                                                # Step 7
         print("WARNING! The error cannot be corrected, please re-enter the input signal.")
         return None
 
 
-gc = GolayCode()
-input_k = ba.bitarray('011011111010')
-encode = gc.encode(input_k)
-print(f"Encode == {encode}")
-index_error = 1
-encode[index_error] = not encode[index_error]
-print(f"Encode with an error in the {index_error} bit: {encode}")
-decode = gc.decode(encode)
-if decode is None:
-   print('Decoding failed')
-else:
-   print(f'Decode == {decode}')
+# gc = GolayCode()
+# input_k = ba.bitarray('011011111010')
+# encode = gc.encode(input_k)
+# print(f"Encode == {encode}")
+# index_error = 1
+# encode[index_error] = not encode[index_error]
+# print(f"Encode with an error in the {index_error} bit: 101111101111010010010010")
+# decode = gc.decode(ba.bitarray('101111101111010010010010'))
+# if decode is None:
+#    print('Decoding failed')
+# else:
+#    print(f'Decode == {decode}')
+
