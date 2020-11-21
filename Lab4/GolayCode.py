@@ -26,7 +26,7 @@ class GolayCode:
         # Получение веса кода
         wt = 0
         for i in range(len(input_signal)):
-            if input_signal[i]:
+            if input_signal[i] == 1:
                 wt += 1
         return wt
 
@@ -57,9 +57,9 @@ class GolayCode:
         H = np.concatenate([I, self.B])     # Матрица H, состоящая из нулей и единиц (H = [ I ])
         #                                                                                 [ B ]
         if input_n.__class__ == ba.bitarray().__class__:   # Если передаваемый параметр - bitarray, то вызываем tolist()
-            np_input = np.array(input_n.tolist())
+            np_input = np.array(input_n.tolist(), dtype=int)
         else:
-            np_input = np.array(input_n)
+            np_input = np.array(input_n, dtype=int)
         s = np.dot(np_input, H) % 2                 # Step 1
         wt_s = self.wt(s)
 
@@ -102,14 +102,57 @@ class GolayCode:
 gc = GolayCode()
 input_k = ba.bitarray('011011111010')
 encode = gc.encode(input_k)
-print(f"Encode == {encode}")
-index_error = 1
-encode[index_error] = not encode[index_error]
+print(f"Encode == \n{np.array(encode, dtype=int)}")
+
+one_error = [np.random.randint(0, len(encode))]
+two_errors = [0, 3]
+three_errors = [1, 2, 4]
+for_errors = [0, 5, 6, 7]
+
+tmp = gc.encode(input_k)
+for i in one_error:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {one_error} bits: \n{np.array(tmp, dtype=int)}')
+decode = gc.decode(tmp)
+if decode is None:
+    print('Decoding failed')
+else:
+    print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
+tmp = gc.encode(input_k)
+for i in two_errors:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {two_errors} bits: \n{np.array(tmp, dtype=int)}')
+decode = gc.decode(tmp)
+if decode is None:
+    print('Decoding failed')
+else:
+    print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
+tmp = gc.encode(input_k)
+for i in three_errors:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {three_errors} bits: \n{np.array(tmp, dtype=int)}')
+decode = gc.decode(tmp)
+if decode is None:
+    print('Decoding failed')
+else:
+    print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
+tmp = gc.encode(input_k)
+for i in for_errors:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {for_errors} bits: \n{np.array(tmp, dtype=int)}')
+decode = gc.decode(tmp)
+if decode is None:
+    print('Decoding failed')
+else:
+    print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
 # print(f"Encode with an error in the {index_error} bit: 101111101111010010010010")
 # decode = gc.decode(ba.bitarray('101111101111010010010010'))
-print(f"Encode with an error in the {index_error} bit: {encode}")
-decode = gc.decode(encode)
-if decode is None:
-   print('Decoding failed')
-else:
-   print(f'Decode == {decode}')
+# decode = gc.decode(encode)
+# if decode is None:
+#    print('Decoding failed')
+# else:
+#    print(f'Decode == {decode}')

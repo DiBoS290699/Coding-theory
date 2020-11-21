@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f26ecf13-919a-4353-8860-1370b416ae01" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolayCode.py" beforeDir="false" afterPath="$PROJECT_DIR$/GolayCode.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hello.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hello.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hello_encode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hello_encode.txt" afterDir="false" />
@@ -17,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GolayCode.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-128">
-              <caret line="62" column="60" lean-forward="true" selection-start-line="62" selection-start-column="60" selection-end-line="62" selection-end-column="60" />
+            <state relative-caret-position="1226">
+              <caret line="104" column="20" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -29,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RMCode.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="43" column="58" lean-forward="true" selection-start-line="43" selection-start-column="58" selection-end-line="43" selection-end-column="119" />
+            <state relative-caret-position="1195">
+              <caret line="132" column="8" selection-start-line="132" selection-start-column="8" selection-end-line="132" selection-end-column="8" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -45,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/Hello.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="2" lean-forward="true" selection-start-column="2" selection-end-column="2" />
+              <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -64,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/Hello_without_errors.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="2" lean-forward="true" selection-start-column="2" selection-end-column="2" />
+              <caret column="4" lean-forward="true" selection-start-column="4" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -94,8 +95,9 @@
         <option value="$PROJECT_DIR$/Main.py" />
         <option value="$PROJECT_DIR$/../../Optical theory/Lab2/Main.py" />
         <option value="$PROJECT_DIR$/dot_for_bits.py" />
-        <option value="$PROJECT_DIR$/RMCode.py" />
         <option value="$PROJECT_DIR$/GolayCode.py" />
+        <option value="$PROJECT_DIR$/Hello.txt" />
+        <option value="$PROJECT_DIR$/RMCode.py" />
       </list>
     </option>
   </component>
@@ -111,6 +113,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -122,7 +125,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -146,7 +148,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.GolayCode">
+  <component name="RunManager" selected="Python.RMCode">
     <configuration name="GolayCode" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Lab4" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -254,8 +256,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.GolayCode" />
         <item itemvalue="Python.RMCode" />
+        <item itemvalue="Python.GolayCode" />
         <item itemvalue="Python.dot_for_bits" />
         <item itemvalue="Python.Main" />
         <item itemvalue="Python.tmp" />
@@ -276,15 +278,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14699684" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14657739" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.48862407" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.34561214" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.6415712" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.5090016" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -315,6 +317,17 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout-to-restore>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RMCode.py</url>
+          <line>175</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/miniconda3/Lib/site-packages/numpy/__init__.py">
@@ -375,12 +388,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Hello.txt">
+    <entry file="file://$PROJECT_DIR$/GolayCode.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="2" lean-forward="true" selection-start-column="2" selection-end-column="2" />
+        <state relative-caret-position="1226">
+          <caret line="104" column="20" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Hello_encode.txt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Hello_errors.txt">
       <provider selected="true" editor-type-id="text-editor" />
@@ -388,27 +407,21 @@
     <entry file="file://$PROJECT_DIR$/Hello_without_errors.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="2" lean-forward="true" selection-start-column="2" selection-end-column="2" />
+          <caret column="4" lean-forward="true" selection-start-column="4" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Hello_encode.txt">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/Hello.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/RMCode.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="43" column="58" lean-forward="true" selection-start-line="43" selection-start-column="58" selection-end-line="43" selection-end-column="119" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GolayCode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-128">
-          <caret line="62" column="60" lean-forward="true" selection-start-line="62" selection-start-column="60" selection-end-line="62" selection-end-column="60" />
+        <state relative-caret-position="1195">
+          <caret line="132" column="8" selection-start-line="132" selection-start-column="8" selection-end-line="132" selection-end-column="8" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>

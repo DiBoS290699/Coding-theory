@@ -106,7 +106,7 @@ class RMCode:
             ba_list[k] = array[k]
         return ba_list
 
-    def encode_file(self, path_to_input_file, path_to_output_file, error=False):
+    def encode_file(self, path_to_input_file, path_to_output_file, error=False, count_errors=1):
         # Кодировка файла из path_to_input_file в path_to_output_file с допуском ошибки (error is True) или без ошибок
         file_bitarray = ba.bitarray()
         with open(path_to_input_file, 'rb') as file:
@@ -124,7 +124,7 @@ class RMCode:
                 if len(code) != self.k:
                     continue
                 encode = self.encode(code)
-                encode = self.make_a_mistake(encode)
+                encode = self.make_a_mistake(encode, count_errors)
                 file_bitarray[i:i + self.k] = self.array2bitarray(encode)
         with open(path_to_output_file, 'wb') as f:
             file_bitarray.tofile(f)
@@ -153,31 +153,59 @@ input_k = []
 for i in range(rmc.k):
     input_k.append(np.random.randint(0, 2, dtype=bool))
 ba_input_k = ba.bitarray(input_k)
-print(f"The input_k == {ba_input_k}")
+print(f"The input_k == \n{ba_input_k}")
 
 encode = rmc.encode(ba_input_k)
-print(f"The encode == {encode}")
-
-index_error = np.random.randint(0, len(encode))
-encode[index_error] = not encode[index_error]
-print(f'The encode with an error in the {index_error} bit: {encode}')
+print(f"The encode == \n{np.array(encode, dtype=int)}")
 
 # print(f'The encode: {10001111}')
 # decode = rmc.decode(ba.bitarray('10001111'))
-decode = rmc.decode(encode)
-print(f'The decode without errors: {decode}')
+
+one_error = [np.random.randint(0, len(encode))]
+two_errors = [0, 3]
+three_errors = [1, 2, 4]
+for_errors = [0, 5, 6, 7]
+
+tmp = rmc.encode(ba_input_k)
+for i in one_error:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {one_error} bits: \n{np.array(tmp, dtype=int)}')
+decode = rmc.decode(tmp)
+print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
+tmp = rmc.encode(ba_input_k)
+for i in two_errors:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {two_errors} bits: \n{np.array(tmp, dtype=int)}')
+decode = rmc.decode(tmp)
+print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
+tmp = rmc.encode(ba_input_k)
+for i in three_errors:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {three_errors} bits: \n{np.array(tmp, dtype=int)}')
+decode = rmc.decode(tmp)
+print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
+tmp = rmc.encode(ba_input_k)
+for i in for_errors:
+    tmp[i] = not tmp[i]
+print(f'The encode with an error in the {for_errors} bits: \n{np.array(tmp, dtype=int)}')
+decode = rmc.decode(tmp)
+print(f'The decode without errors: \n{np.array(decode, dtype=int)}')
+
 
 path_to_input_file = "Hello.txt"
 path_to_output_file = "Hello_encode.txt"
 path_to_output_file_with_errors = "Hello_errors.txt"
 path_to_output_file_without_errors = "Hello_without_errors.txt"
 
-with open(path_to_input_file, 'wb') as file:
-    file_bitarray = ba.bitarray('0'*rmc.k*3)   # создание bitarray с определённым количеством нулей
-    for i in range(0, len(file_bitarray)):
-        file_bitarray[i] = np.random.randint(0, 2) == 1     # Заполнение bitarray рандомными битами
-    file_bitarray.tofile(file)                  # Запись псевдослучайный bitarray в файл
+# with open(path_to_input_file, 'wb') as file:
+#     file_bitarray = ba.bitarray('0'*rmc.k*3)   # создание bitarray с определённым количеством нулей
+#     for i in range(0, len(file_bitarray)):
+#         file_bitarray[i] = np.random.randint(0, 2) == 1     # Заполнение bitarray рандомными битами
+#     file_bitarray.tofile(file)                  # Запись псевдослучайный bitarray в файл
 
 rmc.encode_file(path_to_input_file, path_to_output_file, error=False)
 rmc.encode_file(path_to_input_file, path_to_output_file_with_errors, error=True)
-rmc.decode_file(path_to_output_file_with_errors, path_to_output_file_without_errors)
+rmc.decode_file(path_to_output_file, path_to_output_file_without_errors)
