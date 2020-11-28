@@ -119,8 +119,9 @@ path_to_input_file = "Hello.txt"
 path_to_output_file = "Hello_sys_encode.txt"
 path_to_output_file_with_errors = "Hello_errors.txt"
 path_to_output_file_without_errors = "Hello_without_errors.txt"
+size_bitarray = 8*8*cc.k//cc.n
 with open(path_to_input_file, 'wb') as file:
-    file_bitarray = ba.bitarray('0'*cc.k*3)   # создание bitarray с определённым количеством нулей
+    file_bitarray = ba.bitarray('0'*size_bitarray)   # создание bitarray с определённым количеством нулей
     for i in range(0, len(file_bitarray)):
         file_bitarray[i] = np.random.randint(0, 2) == 1     # Заполнение bitarray рандомными битами
     file_bitarray.tofile(file)                  # Запись псевдослучайный bitarray в файл

@@ -111,23 +111,26 @@ class RMCode:
         file_bitarray = ba.bitarray()
         with open(path_to_input_file, 'rb') as file:
             file_bitarray.fromfile(file)  # Чтение файла
+        size = len(file_bitarray)
+        encode_file = []
         if not error:
-            for i in range(0, len(file_bitarray), self.n):
+            for i in range(0, size, self.k):
                 code = file_bitarray[i: i + self.k]
                 if len(code) != self.k:
                     continue
                 encode = self.encode(code)
-                file_bitarray[i:i + self.k] = self.array2bitarray(encode)
+                encode_file.extend(encode)
         else:
-            for i in range(0, len(file_bitarray), self.n):
+            for i in range(0, size, self.k):
                 code = file_bitarray[i: i + self.k]
                 if len(code) != self.k:
                     continue
                 encode = self.encode(code)
                 encode = self.make_a_mistake(encode, count_errors)
-                file_bitarray[i:i + self.k] = self.array2bitarray(encode)
+                encode_file.extend(encode)
         with open(path_to_output_file, 'wb') as f:
-            file_bitarray.tofile(f)
+            encode_file = self.array2bitarray(encode_file)
+            encode_file.tofile(f)
         print(f"Encoding ({path_to_input_file} in {path_to_output_file}) completed successfully")
 
     def decode_file(self, path_to_input_file, path_to_output_file):
@@ -135,14 +138,17 @@ class RMCode:
         file_bitarray = ba.bitarray()
         with open(path_to_input_file, 'rb') as file:
             file_bitarray.fromfile(file)  # Чтение файла
-        for i in range(0, len(file_bitarray), self.k):
+        size = len(file_bitarray)
+        decode_file = []
+        for i in range(0, size, self.n):
             code = file_bitarray[i: i + self.n]
             if len(code) != self.n:
                 continue
             decode = self.decode(code)
-            file_bitarray[i:i + self.n] = self.array2bitarray(decode)
+            decode_file.extend(decode)
         with open(path_to_output_file, 'wb') as f:
-            file_bitarray.tofile(f)
+            decode_file = self.array2bitarray(decode_file)
+            decode_file.tofile(f)
         print(f"Decoding ({path_to_input_file} in {path_to_output_file}) completed successfully")
 
 
@@ -208,4 +214,4 @@ path_to_output_file_without_errors = "Hello_without_errors.txt"
 
 rmc.encode_file(path_to_input_file, path_to_output_file, error=False)
 rmc.encode_file(path_to_input_file, path_to_output_file_with_errors, error=True)
-rmc.decode_file(path_to_output_file, path_to_output_file_without_errors)
+rmc.decode_file(path_to_output_file_with_errors, path_to_output_file_without_errors)

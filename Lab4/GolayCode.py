@@ -102,6 +102,7 @@ class GolayCode:
 gc = GolayCode()
 input_k = ba.bitarray('011011111010')
 encode = gc.encode(input_k)
+print(f"Input == \n{input_k}")
 print(f"Encode == \n{np.array(encode, dtype=int)}")
 
 one_error = [np.random.randint(0, len(encode))]
