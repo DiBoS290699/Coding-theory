@@ -16,11 +16,13 @@ class RMCode:
             self.k = int(self.k)
         self.n = None if m is None else 2**m
         self.d = None if m is None or r is None else 2**(self.m - self.r)
-        self.G_r_m = self.gen_matrix(r, m)
         self.K_m = self.set_binary_digits()
+        self.Z_m = np.arange(0, self.m)
+        self.J_arr = self.J_array()
+        self.G_r_m = self.canon_G(self.J_arr, self.K_m)
 
 
-    def gen_matrix(self, r, m):
+    def recur_G(self, r, m):
         # Построение порождающей матрицы рекурсивным методом
         if m is None or r is None or r < 0 or m < 0 or m < r or m == r == 0:
             print(f"ERROR! The value m or r is incorrect: m is {m}, r is {r}")
@@ -46,18 +48,31 @@ class RMCode:
         return np.array(list)
 
     def J_array(self):
-        Z_m = np.arange(0, self.m)
         J_array = []
         for i in range(self.r + 1):
             tmp_list = []
-            for j in combinations(Z_m, i):
+            for j in combinations(self.Z_m, i):
                 tmp_list.append(j)
             tmp_list = tmp_list[::-1]
             J_array.extend(tmp_list)
-        print(J_array)
-
         return np.array(J_array)
 
+    def row_canon_G(self, J, bin_digits):
+        row = np.ones(len(bin_digits), dtype=bool)
+        for j in range(len(bin_digits)):
+            for k in J:
+                if k is None:
+                    row[j] &= True
+                else:
+                    row[j] &= not bin_digits[j, k]
+        return row
+
+    def canon_G(self, J_array, bin_digits):
+        G_r_m = []
+        for i in range(len(J_array)):
+            row = self.row_canon_G(J_array[i], bin_digits)
+            G_r_m.append(row)
+        return G_r_m
 
     def encode(self, input_k):
         # Кодирование, путём умножения на порождающую матрицу
@@ -90,6 +105,19 @@ class RMCode:
         for i in range(len(str_j)):     # Получение реверсивного вида битового числа (младшие разряды слева)
             list[i] = int(str_j[-i - 1]) == 1
         return list
+
+    def major_decode(self):
+        J_c_arr = []
+        for i in range(len(J_array)):
+            J_c_arr.append(np.setdiff1d(self.Z_m, self.J_arr[i]))
+        b_matrix = self.canon_G(J_c_arr, self.K_m)
+        t_array = []
+        for J_c in J_c_arr:
+            t = np.zeros((len(J_c)*2, self.m))
+            for k in range(0, len(shifts), 2):
+                t[k, J_c[]]
+
+
 
     def decode(self, input_n):
         # Алгоритм декодирования
@@ -176,7 +204,8 @@ class RMCode:
 
 
 rmc = RMCode(2, 4)
-print(rmc.J_array())
+rmc.major_decode()
+print(np.array(rmc.G_r_m, dtype=int))
 # G_r_m = rmc.gen_matrix(3, 3)
 # print(G_r_m)
 # input_k = []
