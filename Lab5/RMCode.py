@@ -108,15 +108,20 @@ class RMCode:
 
     def major_decode(self):
         J_c_arr = []
-        for i in range(len(J_array)):
+        for i in range(len(self.J_arr)):
             J_c_arr.append(np.setdiff1d(self.Z_m, self.J_arr[i]))
         b_matrix = self.canon_G(J_c_arr, self.K_m)
         t_array = []
-        for J_c in J_c_arr:
-            t = np.zeros((len(J_c)*2, self.m))
-            for k in range(0, len(shifts), 2):
-                t[k, J_c[]]
-
+        for J in self.J_arr:
+            if len(J) == 0:
+                t_array.append(self.K_m.copy())
+            else:
+                t = self.K_m.copy()
+                for elem_t in t:
+                    for elem_J in J:
+                        elem_t[elem_J] = False
+                t_array.append(np.unique(t, axis=0))
+        print(t_array)
 
 
     def decode(self, input_n):
@@ -205,7 +210,7 @@ class RMCode:
 
 rmc = RMCode(2, 4)
 rmc.major_decode()
-print(np.array(rmc.G_r_m, dtype=int))
+# print(np.array(rmc.G_r_m, dtype=int))
 # G_r_m = rmc.gen_matrix(3, 3)
 # print(G_r_m)
 # input_k = []
