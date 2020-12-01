@@ -16,7 +16,7 @@ class RMCode:
             self.k = int(self.k)
         self.n = None if m is None else 2**m
         self.d = None if m is None or r is None else 2**(self.m - self.r)
-        self.K_m = self.set_binary_digits()
+        self.K_m = self.get_binary_digits()
         self.Z_m = np.arange(0, self.m)
         self.J_arr = self.J_array()
         self.G_r_m = self.canon_G(self.J_arr, self.K_m)
@@ -41,10 +41,10 @@ class RMCode:
             zeros = np.zeros(shape_zeros, dtype=bool)
             return np.concatenate([G_r_m_1, np.concatenate([zeros, G_r_1_m_1], axis=1)])
 
-    def set_binary_digits(self):
+    def get_binary_digits(self):
         list = []
         for i in range(0, self.n):
-            list.append(self.v_j(i))
+            list.append(self.get_reverse_binary_number(i))
         return np.array(list)
 
     def J_array(self):
@@ -98,13 +98,35 @@ class RMCode:
             I_right = np.eye(2**(i - 1))    # Единичная матрица определённого размера
             return np.kron(np.kron(I_left, H), I_right)  # Последовательное произведение Кронекера
 
-    def v_j(self, j):
+    def get_reverse_binary_number(self, j):
         # Двоичное представление передаваемого числа с младшими разрядами слева
         str_j = bin(j)[2:]  # Приведение числа к булевому значению (но хранится как строка) с пропуском символов формата
         list = np.zeros(self.m, dtype=bool)
         for i in range(len(str_j)):     # Получение реверсивного вида битового числа (младшие разряды слева)
             list[i] = int(str_j[-i - 1]) == 1
         return list
+
+    def get_number_from_binary(self, bits, reverse=False):
+        number = 0
+        indexes_of_bits = range(len(bits)) if not reverse else range(len(bits) - 1, -1, -1)
+        degree = 0
+        for i in indexes_of_bits:
+            if bits[i]:
+                number += 2**degree
+            degree += 1
+        return number
+
+
+    def verification_vectors(self, b, t):
+        ver_vectors = []
+        shifts = []
+        for elem_t in t:
+            shifts.append(self.get_number_from_binary(elem_t))
+        shifts = np.sort(shifts)
+        for shift in shifts:
+            ver_vectors.append(np.roll(b, shift=shift))
+        return ver_vectors
+
 
     def major_decode(self):
         J_c_arr = []
@@ -124,6 +146,7 @@ class RMCode:
         print(t_array)
 
 
+
     def decode(self, input_n):
         # Алгоритм декодирования
         if len(input_n) != self.n:
@@ -137,7 +160,7 @@ class RMCode:
         for i in range(2, self.m + 1):
             w_i = np.dot(w_i, self.H_i_m(i, self.m))        # Получение w_i путём умножение w_(i-1) на H^i_m
         j = np.argmax(np.abs(w_i))      # Получение индекса максимального абсолютного значения в массиве
-        v_j = self.v_j(j)       # Получение реверсивного битового значения индекса j
+        v_j = self.get_reverse_binary_number(j)       # Получение реверсивного битового значения индекса j
 
         result = np.zeros(len(v_j) + 1, dtype=bool)
         for i in range(1, len(v_j) + 1):        # Получение новго массива с True в начале при w_i[j] > 0, иначе False
@@ -209,7 +232,10 @@ class RMCode:
 
 
 rmc = RMCode(2, 4)
-rmc.major_decode()
+b = [1,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0]
+t = [[0,0,0,0], [1,0,0,0], [0,0,1,0], [1,0,1,0]]
+print(rmc.verification_vectors(b, t))
+# rmc.major_decode()
 # print(np.array(rmc.G_r_m, dtype=int))
 # G_r_m = rmc.gen_matrix(3, 3)
 # print(G_r_m)
