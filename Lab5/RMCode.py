@@ -116,34 +116,48 @@ class RMCode:
             degree += 1
         return number
 
+    def get_binary_shifts(self, J):
+        t = self.K_m.copy()
+        if len(J) == 0:
+            return t
+        else:
+            for elem_t in t:
+                for elem_J in J:
+                    elem_t[elem_J] = False
+            return np.unique(t, axis=0)
 
-    def verification_vectors(self, b, t):
-        ver_vectors = []
-        shifts = []
+    def verification_vectors_for_J(self, J):
+        J_c = np.setdiff1d(self.Z_m, J)
+        b = self.row_canon_G(J_c, self.K_m)
+        t = self.get_binary_shifts(J)
+        ver_vectors = {}
         for elem_t in t:
-            shifts.append(self.get_number_from_binary(elem_t))
-        shifts = np.sort(shifts)
-        for shift in shifts:
-            ver_vectors.append(np.roll(b, shift=shift))
+            ver_vectors[str(elem_t)] = np.roll(b, shift=self.get_number_from_binary(elem_t))
         return ver_vectors
 
+    def dot_with_mod2(self, a, b):
+        if len(a) != len(b):
+            raise Exception("The dimensions of the transmitted values do not match")
+        else:
+            result = False
+            for i in range(len(a)):
+                result ^= a[i] & b[i]
+            return result
 
-    def major_decode(self):
-        J_c_arr = []
-        for i in range(len(self.J_arr)):
-            J_c_arr.append(np.setdiff1d(self.Z_m, self.J_arr[i]))
-        b_matrix = self.canon_G(J_c_arr, self.K_m)
-        t_array = []
-        for J in self.J_arr:
-            if len(J) == 0:
-                t_array.append(self.K_m.copy())
+    def major_decode(self, message):
+        i = self.r
+        w_i = message
+        last_one_in_m = None
+        for index_J in range(len(self.J_arr) - 1, -1, -1):
+            J = self.J_arr[index_J]
+            if len(J) < i or J[-1] is None:
+                i -= 1
+                index_J += 1
+                w_i = w_i
+                continue
             else:
-                t = self.K_m.copy()
-                for elem_t in t:
-                    for elem_J in J:
-                        elem_t[elem_J] = False
-                t_array.append(np.unique(t, axis=0))
-        print(t_array)
+                ver_vectors = self.verification_vectors_for_J(J)
+
 
 
 
@@ -232,10 +246,7 @@ class RMCode:
 
 
 rmc = RMCode(2, 4)
-b = [1,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0]
-t = [[0,0,0,0], [1,0,0,0], [0,0,1,0], [1,0,1,0]]
-print(rmc.verification_vectors(b, t))
-# rmc.major_decode()
+rmc.major_decode()
 # print(np.array(rmc.G_r_m, dtype=int))
 # G_r_m = rmc.gen_matrix(3, 3)
 # print(G_r_m)
