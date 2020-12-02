@@ -146,18 +146,35 @@ class RMCode:
 
     def major_decode(self, message):
         i = self.r
-        w_i = message
-        last_one_in_m = None
+        w_i = np.array(message)
+        m = np.zeros(self.n, dtype=bool)
+        sum_rows_with_1 = np.zeros(self.n, dtype=bool)
         for index_J in range(len(self.J_arr) - 1, -1, -1):
             J = self.J_arr[index_J]
             if len(J) < i or J[-1] is None:
-                i -= 1
-                index_J += 1
-                w_i = w_i
-                continue
+                w_i = w_i + sum_rows_with_1
+                if not np.sum(w_i) > 2**(self.m - self.r - 1) - 1:
+                    print("w(i-1) has a weight of no more than 2**(m - r - 1) - 1)")
+                    return m
+                else:
+                    i -= 1
+                    index_J += 1
+                    continue
             else:
                 ver_vectors = self.verification_vectors_for_J(J)
-
+                dot_vv_with_w = []
+                for vector in ver_vectors.values():
+                    dot_vv_with_w.append(self.dot_with_mod2(w_i, vector))
+                count_True = dot_vv_with_w.count(True)
+                count_False = len(dot_vv_with_w) - count_True
+                if count_True > count_False:
+                    sum_rows_with_1 ^= self.verification_vectors_for_J(np.setdiff1d(self.Z_m, J))["[False False False False]"]
+                    m[index_J] = True
+                elif count_True < count_False:
+                    m[index_J] = False
+                else:
+                    raise Exception("Send the message again")
+        return m
 
 
 
@@ -246,7 +263,12 @@ class RMCode:
 
 
 rmc = RMCode(2, 4)
-rmc.major_decode()
+message1 = [False, True, False, True, False, True, True, True, True, False, True, False,
+           False, False, False, False]
+message2 = [True, False, True, False, True, False, False, False, False, True, False,
+            True, True, True, True, True, ]
+decode = rmc.major_decode(message2)
+print(np.array(decode, dtype=int))
 # print(np.array(rmc.G_r_m, dtype=int))
 # G_r_m = rmc.gen_matrix(3, 3)
 # print(G_r_m)
