@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f26ecf13-919a-4353-8860-1370b416ae01" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RMCode.py" beforeDir="false" afterPath="$PROJECT_DIR$/RMCode.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RMCode.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="852">
-              <caret line="291" column="5" lean-forward="true" selection-start-line="291" selection-start-column="5" selection-end-line="291" selection-end-column="5" />
+            <state relative-caret-position="291">
+              <caret line="331" column="16" selection-start-line="331" selection-start-column="16" selection-end-line="331" selection-end-column="16" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -47,6 +46,7 @@
       <find>}</find>
       <find>None</find>
       <find>make_a</find>
+      <find>get_binary_digi</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -381,8 +381,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RMCode.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="852">
-          <caret line="291" column="5" lean-forward="true" selection-start-line="291" selection-start-column="5" selection-end-line="291" selection-end-column="5" />
+        <state relative-caret-position="291">
+          <caret line="331" column="16" selection-start-line="331" selection-start-column="16" selection-end-line="331" selection-end-column="16" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
