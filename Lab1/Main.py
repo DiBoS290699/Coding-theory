@@ -1,11 +1,10 @@
-import bitarray as ba
+﻿import bitarray as ba
 import numpy as np
 
 bits = ba.bitarray()
 f = open("test.txt", 'rb')
 bits.fromfile(f)
 print(bits)
-
 
 
 def from_H_in_G():
